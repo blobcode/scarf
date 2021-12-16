@@ -1,37 +1,29 @@
 # 🧣 scarf
 
-scarf is a super simple tcp load balancer based on rust built as a learning project to go with [pine](https://github.com/blobcode/pine), a super simple reverse proxy.
+scarf is a super simple tcp load balancer based on rust built as a learning project to work with [pine](https://github.com/blobcode/pine), a super simple reverse proxy.
 
 ## Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them.
+To get started, download the project 
 
 ```
-Give examples
+git clone https://github.com/blobcode/scarf
 ```
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+and `cd` into it.
 
 ```
-Give the example
+cd scarf
+```
+You can then compile and run.
+```
+cargo run --release
 ```
 
-And repeat
-
+You can also give it a custom path to a config file.
 ```
-until finished
+cargo run --release ./path/to/scarf.toml
 ```
-
-End with an example of getting some data out of the system or using it for a little demo.
 
 ## Usage <a name = "usage"></a>
-
-Add notes about how to use the system.
+Scarf is meant to be used behind a [reverse proxy](https://github.com/blobcode/pine) / ssl terminator to act as an entrypoint to a service. You can look at an example config file in [scarf.toml](https://github.com/blobcode/scarf/blob/master/scarf.toml).
