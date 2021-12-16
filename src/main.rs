@@ -7,8 +7,8 @@ mod handler;
 // main loop
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    // load config
-    let config = config::load();
+    // load config (replace this logic later)
+    let config = config::load("./scarf.toml".to_string());
 
     // set listen addr
     let listen_addr = format!("{}:{}", config.ip, config.port);

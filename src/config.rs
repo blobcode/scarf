@@ -17,7 +17,7 @@ struct ServiceConfig {
 }
 
 // load in config file (toml)
-pub fn load() -> Config {
+pub fn load(path: String) -> Config {
     let file = fs::read_to_string("./scarf.toml").expect("Unable to read file");
     let config: Config = toml::from_str(&file).unwrap();
     return config;
