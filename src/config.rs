@@ -6,14 +6,14 @@ use std::fs;
 pub struct Config {
     pub ip: String,
     pub port: i32,
-    pub sevices: Option<Vec<ServiceConfig>>,
+    pub service: Option<Vec<ServiceConfig>>,
 }
 
 // struct for individual service config
 #[derive(Debug, Deserialize)]
-struct ServiceConfig {
-    name: Option<String>,
-    address: Option<String>,
+pub struct ServiceConfig {
+    pub name: String,
+    pub address: String,
 }
 
 // load in config file (toml)

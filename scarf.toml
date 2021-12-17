@@ -1,8 +1,8 @@
 ip = "0.0.0.0" # address to open port on
-port = 8080 # port to serve on
+port = 8080    # port to serve on
 
 [[service]] # service (create one of these for each node)
-name = "service a" # node name (used for logging)
+name = "service a"         # node name (used for logging)
 address = "localhost:5000" # address for the node
 
 [[service]]
