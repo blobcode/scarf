@@ -1,8 +1,8 @@
 use futures::FutureExt;
-use rand::seq::SliceRandom;
 use std::error::Error;
 use tokio::net::TcpListener;
 
+mod balancer;
 mod config;
 mod handler;
 
@@ -14,6 +14,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // set listen addr
     let listen_addr = format!("{}:{}", config.ip, config.port);
+
     let mut addrlist: Vec<String> = Vec::new();
 
     // print startup info
@@ -39,7 +40,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // handle connections
     while let Ok((inbound, _)) = listener.accept().await {
-        let server_addr = addrlist.choose(&mut rand::thread_rng()).unwrap();
+        // random select the
+        let server_addr = balancer::roundrobin(addrlist.to_owned());
         let transfer = handler::transfer(inbound, server_addr.clone()).map(|r| {
             if let Err(e) = r {
                 // error handling
