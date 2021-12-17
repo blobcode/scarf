@@ -1,5 +1,6 @@
 use comfy_table::Table;
 use futures::FutureExt;
+use rand::seq::SliceRandom;
 use std::error::Error;
 use tokio::net::TcpListener;
 
@@ -14,7 +15,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // set listen addr
     let listen_addr = format!("{}:{}", config.ip, config.port);
-    let server_addr = "127.0.0.1:5000".to_string();
+    let mut addrlist: Vec<String> = Vec::new();
 
     // print startup info
     let logo = r#"
@@ -27,25 +28,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("{}\n", logo);
     println!("Listening on: {}", listen_addr);
-    println!("Proxying to: {}\n", server_addr);
-
-    // print table listing active servers
-    let mut servicetable = Table::new();
-    servicetable.set_header(vec!["service", "address", "status"]);
 
     let services = config.service.unwrap(); // unwrap used b/c it should always be loaded
 
     for service in services {
-        servicetable.add_row(vec![service.name, service.address, "ok".to_string()]);
+        addrlist.push(service.address);
     }
-
-    println!("{}", servicetable);
 
     // open tcp socket
     let listener = TcpListener::bind(listen_addr).await?;
 
     // handle connections
     while let Ok((inbound, _)) = listener.accept().await {
+        let server_addr = addrlist.choose(&mut rand::thread_rng()).unwrap();
         let transfer = handler::transfer(inbound, server_addr.clone()).map(|r| {
             if let Err(e) = r {
                 // error handling

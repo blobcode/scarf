@@ -2,7 +2,7 @@ use serde::Deserialize;
 use std::fs;
 
 // main config struct
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Config {
     pub ip: String,
     pub port: i32,
@@ -10,7 +10,7 @@ pub struct Config {
 }
 
 // struct for individual service config
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ServiceConfig {
     pub name: String,
     pub address: String,
