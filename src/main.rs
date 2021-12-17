@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     "#;
 
     println!("{}\n", logo);
-    info!("Listening on: {}", listen_addr);
+    info!("listening on {}", listen_addr);
 
     let services = config.service.unwrap(); // unwrap used b/c it should always be loaded
 
