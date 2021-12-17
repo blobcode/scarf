@@ -1,4 +1,6 @@
+use env_logger::Env;
 use futures::FutureExt;
+use log::{error, info};
 use std::error::Error;
 use tokio::net::TcpListener;
 
@@ -9,6 +11,10 @@ mod handler;
 // main loop
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    // setup logging
+    let env = Env::default().filter_or("MY_LOG_LEVEL", "info");
+    env_logger::init_from_env(env);
+
     // load config (replace this logic later)
     let config = config::load("./scarf.toml".to_string());
 
@@ -27,7 +33,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     "#;
 
     println!("{}\n", logo);
-    println!("Listening on: {}", listen_addr);
+    info!("Listening on: {}", listen_addr);
 
     let services = config.service.unwrap(); // unwrap used b/c it should always be loaded
 
@@ -42,10 +48,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     while let Ok((inbound, _)) = listener.accept().await {
         // random select the
         let server_addr = balancer::roundrobin(addrlist.to_owned());
+
+        info!("sending to {}", server_addr);
         let transfer = handler::transfer(inbound, server_addr.clone()).map(|r| {
             if let Err(e) = r {
                 // error handling
-                println!("Failed to transfer; error={}", e);
+                error!("Failed to transfer; error={}", e);
             }
         });
         // create thread
