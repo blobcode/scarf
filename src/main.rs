@@ -1,4 +1,3 @@
-use comfy_table::Table;
 use futures::FutureExt;
 use rand::seq::SliceRandom;
 use std::error::Error;
