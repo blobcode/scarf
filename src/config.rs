@@ -6,6 +6,7 @@ use std::fs;
 pub struct Config {
     pub ip: String,
     pub port: i32,
+    pub method: Option<String>,
     pub service: Option<Vec<ServiceConfig>>,
 }
 
@@ -14,6 +15,7 @@ pub struct Config {
 pub struct ServiceConfig {
     pub name: String,
     pub address: String,
+    pub weight: Option<i32>,
 }
 
 // load in config file (toml)

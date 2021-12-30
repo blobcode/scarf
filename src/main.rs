@@ -17,11 +17,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // load config (replace this logic later)
     let config = config::load("./scarf.toml".to_string());
+    let method = config.method.unwrap_or("".to_string());
+    let method = method.as_str();
 
     // set listen addr
     let listen_addr = format!("{}:{}", config.ip, config.port);
-
-    let mut addrlist: Vec<String> = Vec::new();
 
     // print startup info
     let logo = r#"
@@ -37,17 +37,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let services = config.service.unwrap(); // unwrap used b/c it should always be loaded
 
-    for service in services {
-        addrlist.push(service.address);
-    }
-
     // open tcp socket
     let listener = TcpListener::bind(listen_addr).await?;
 
     // handle connections
     while let Ok((inbound, _)) = listener.accept().await {
         // random select the
-        let server_addr = balancer::roundrobin(addrlist.to_owned());
+        let server_addr = balancer::handle(method, services.to_owned());
 
         info!("sending to {}", server_addr);
         let transfer = handler::transfer(inbound, server_addr.clone()).map(|r| {

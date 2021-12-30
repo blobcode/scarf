@@ -1,10 +1,13 @@
-ip = "0.0.0.0" # address to open port on
-port = 8080    # port to serve on
+ip = "0.0.0.0"        # address to open port on
+port = 8080           # port to serve on
+method = "roundrobin"
 
 [[service]] # service (create one of these for each node)
 name = "service a"         # node name (used for logging)
 address = "localhost:5000" # address for the node
+weight = 1
 
 [[service]]
 name = "service b"
 address = "localhost:6000"
+weight = 2
